@@ -29,7 +29,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >
 ## Pipeline
 >### 1. Camera calibration
-> When a camera takes an image of 3D-object and transforms it into an 2D image, this image can be distorted and deleaver erroneus informations.
+> When a camera takes an image of 3D-object and transforms it into an 2D image, this image can be distorted and deliver erroneus informations.
 > To correct the distortion, we must calculate a camera-matrix and distortion-coeffisients with a set of chessboard images. In this project, cv2.calibrateCamera() function and a set of 20 chessboard images are used to compute these matrix and coefficients.
 >
 > The code for this process is contained in the ***Calib*** class in the classes.py.
@@ -46,7 +46,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/output.gif)
 >
 > ### 1. Bird-View image
->![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Bird_iew.gif)
+>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Bird_view.gif)
 >
 > ### 2. Camera image
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Camera_view.gif)
