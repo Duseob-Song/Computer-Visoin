@@ -8,11 +8,11 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 
 ## Files
 >* [main.py](https://github.com/DuseobSong/Lane-Detection/blob/master/main.py): main code
->* classes.py: contains following classes
-> > * class Calib: to get and apply camera-matrix and distortion-coefficients
-> > * class Mask: filtering image with gradient-based method and corlor-space-based thresholding
-> > * class Lane: perspective transformation, find lane lines with sliding-window method
->* functions.py: functions to record results
+>* [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/master/classes.py): contains following classes
+> > * class ***Calib***: to get and apply camera-matrix and distortion-coefficients
+> > * class ***Mask***: filtering image with gradient-based method and corlor-space-based thresholding
+> > * class ***Lane***: perspective transformation, find lane lines with sliding-window method
+>* [functions.py](https://github.com/DuseobSong/Lane-Detection/blob/master/functions.py): functions to record results
 
 ## Developement Environment
 >OS: Wndows 10 (x64)
