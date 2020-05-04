@@ -15,9 +15,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >* [functions.py](https://github.com/DuseobSong/Lane-Detection/blob/master/functions.py): functions to record results
 
 ## Developement Environment
->OS: Wndows 10 (x64)
->   Program Language: Python 3.5
->   Image processing library: OpenCV 4.2.0
+>OS: Wndows 10 (x64), Python 3.5, OpenCV 4.2.0
 
 ## Structure
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Structure.png)
