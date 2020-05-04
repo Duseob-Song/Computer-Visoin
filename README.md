@@ -46,7 +46,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/output.gif)
 >
 > ### 1. Bird-View image
->![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Bird_View.gif)
+>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Bird_iew.gif)
 >
 > ### 2. Camera image
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Camera_view.gif)
