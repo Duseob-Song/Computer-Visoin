@@ -36,6 +36,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >
 >(Further information: [OpenCV Tutorial - Camera Calibration](https://docs.opencv.org/master/dc/dbb/tutorial_py_calibration.html))
 >
+> ![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/calibration/calibration.png)
 >### 2. Image preprocessing
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Preprocessing.png)
 
