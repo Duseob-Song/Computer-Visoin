@@ -7,8 +7,7 @@ The goal of this project is to develope an lane detection algorithm for LDW-syst
 In this Project, we'll use a gradient-based method and a color-based method to extract information to identify road lanes.
 
 ## Files
->* [main.py][main.py]: main code
-[main.py]: https://github.com/DuseobSong/Lane-Detection/blob/master/main.py 
+>* [main.py](https://github.com/DuseobSong/Lane-Detection/blob/master/main.py): main code
 >* classes.py: contains following classes
 > > * class Calib: to get and apply camera-matrix and distortion-coefficients
 > > * class Mask: filtering image with gradient-based method and corlor-space-based thresholding
