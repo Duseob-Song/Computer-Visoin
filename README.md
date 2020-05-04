@@ -30,7 +30,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 ## Pipeline
 >### 1. Camera calibration
 > When a camera takes an image of 3D-object and transforms it into an 2D image, this image can be distorted and deliver erroneus informations.
-> To correct the distortion, we must calculate a camera-matrix and distortion-coeffisients with a set of chessboard images. In this project, cv2.calibrateCamera() function and a set of 20 chessboard images are used to compute these matrix and coefficients.
+> To correct the distortion, we must calculate a camera-matrix and distortion-coeffisients with a set of chessboard images. In this project, [cv2.calibrateCamera()](https://docs.opencv.org/2.4/modules/calib3d/doc/camera_calibration_and_3d_reconstruction.html) function and a set of 20 chessboard images are used to compute these matrix and coefficients.
 >
 > The code for this process is contained in the ***Calib*** class in the classes.py.
 >
