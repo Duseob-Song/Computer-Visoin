@@ -41,7 +41,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >### 2. Image preprocessing
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Preprocessing.png)
 >
-> You can find the code for image preprocessing in class ***Mask*** in [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/update_0505/classes.py).
+> You can find the code for image preprocessing in class ***Mask*** in [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/master/classes.py).
 >
 > #### ***2-1. Color space transform***
 > 
@@ -87,12 +87,12 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >
 >#### ***2-3. Filtering with gradient information***
 >>In gradient approach, Sobel operator is applied to calculate gradients in x- and y- directions, and then their magnitudes and orientations are calculated. Next, image pixels are thresholded with this gradient informations and the location of filtered image-pixels are saved on a gradient-mask image.
->> You can find the code for this process in the ***img_preprocessing( )*** function of class ***Mask*** in [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/update_0505/classes.py).
+>> You can find the code for this process in the ***img_preprocessing( )*** function of class ***Mask*** in [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/master/classes.py).
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/gradient_filtering.png)
 >>
 
 >#### ***2-4. Thresholding with color information***
->> We can filter 
+>> Line pixels have high values in the contrast enhanced channel images, and we can filter them with ***np.percentile( )*** function.
 >><pre><code>Y_channel_color_mask = np.zeros_like(y_channel_img)
 >>Cr_channel_color_mask = np.zeros_like(Cr_channel_img)
 >>S_channel_color_mask = np.zeros_like(S_channel_img)
@@ -109,12 +109,35 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >>
 >
 >#### Result
+>> After the gradient mask and color mask have been calculated, they are combined with ***cv2.bitwise_or( )*** function.
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/Preprocessing%20result.png)
 >> 
 >
-
 >### 3. Find lane
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Detection.png)
+>
+> You can find the code for lane finding in class ***Lane*** in [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/master/classes.py).
+> #### 3.1 Perspective transform
+>> To get more information, such as curve direction and radius of curvature, the preprocessed mask image is transformed into bird's-eye view image. 
+>> Befor applying perspective transform, we have to define source and destination vertices in the original image and the transformed image. The functions ***set_src( )*** and  ***set_det( )*** in class ***Lane*** represents this process. And then, we can calculate matrices for perspective and invers-perspective transformation with ***set_perspective_matrix( )*** in class ***Lane***. 
+>><pre><code>lines = Lane()
+>>lines.warp_size = (bird_view_width, bird_view_height)
+>>lines.set_src(img_width = img_width, left_bottom = left_bottom_coord, left_top = left_top_coord)
+>>lines.set_dst(warp_size = lines.warp_size)
+>>lines.set_perspective_matrix()
+>></code></pre>
+>>
+>> Now we can generate Bird's eye view image with these matrices and [cv2.warpPerspectiveTransform( )](https://docs.opencv.org/2.4/modules/imgproc/doc/geometric_transformations.html) function.
+>><pre><code> bird_view_img = cv2.warpPerspectiveTransform(img, M, (lines.warp_size[0], lines.warp_size[1])
+>>
+>>Here's an example of the perspective transformation.
+>>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/perspective_transform/transform.png)
+
+
+> #### 3.2 Search windows initialization
+
+> #### 3.3 Lane estimation with sliding window method
+
 
 ## Result
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/output.gif)
