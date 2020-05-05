@@ -75,20 +75,32 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >>
 >
 >#### ***2-2. Contrast enhancement***
->>[image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/contrast_enhancement.png)
+>> We here enhance the image contrast in each image to more clearly distinguish line pixels from other objects.
+>> First, piexls values lower than threshold in each channel image are replaced with the threshold, and then the images are normalized with the maximum and minimum pixel values.
+>><pre><code>{channel_img[channel_img < threshold] = threshold
+channel_img_noramlized = cv2.normalize(channel_img, None, 0, 255, cv2.NORM_MINMAX)}</code></pre>
+>>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/contrast_enhancement.png)
 >>
 >>
 >
+더욱 선명하게 차선과 이외의 오브젝트들을 분리하기 위하여 콘트라스트 향상을 수행한다. 
+우선 각 채널들의 이미지를 트레쉬홀딩하여 낮은 값들을(불필요한) 임계값으로 대체한다.
+그 후 최대값과 최소값으로 일반화한다.
+
+1. 각 채널의 이미지에서 낮은값 억제
 >#### ***2-3. Filtering with gradient information***
->>[image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/gradient_filtering.png)
+>>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/gradient_filtering.png)
 >>
 >
+
+1. 
 >#### ***2-4. Thresholding with color information***
->>[image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/color_thresholding.png)
+>>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/color_thresholding.png)
 >>
 >
 >#### Result
->>
+>>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/Preprocessing%20result.png)
+>> 
 >
 
 >### 3. Find lane
