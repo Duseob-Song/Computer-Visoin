@@ -59,8 +59,8 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >>In S-channel image, the yellow lines on light-gray background can be identified.
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/S_yellow_on_light_gray.png)
 >>
-> Note that shadows also have a high saturation value, so pixels with low values in the Y-channel image should be filtered out to identify relevant pixels.
->>''' S_channel_img[Y_channel_image < shadow_threshold] = 0 '''
+>> Note that shadows also have a high saturation value, so pixels with low values in the Y-channel image should be filtered out to identify relevant pixels.
+>> <pre><code> S_channel_img[Y_channel_image < shadow_threshold] = 0 </code></pre>
 >>***shadow_threshold*** depends on weather condition or ilumination.
 >>
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/S_shadow_remove.png)
