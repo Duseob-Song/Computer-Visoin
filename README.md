@@ -40,6 +40,9 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 
 >### 2. Image preprocessing
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Preprocessing.png)
+>
+> You can find the code for image preprocessing in class ***Mask*** in [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/update_0505/classes.py).
+>
 > #### ***2-1. Color space transform***
 > 
 > First, RGB-images are transformed into YCrCb- and HLS color spaces with [cv2.cvtColor( )](https://docs.opencv.org/2.4/modules/imgproc/doc/miscellaneous_transformations.html). In this project, we use Y-, Cr- and S-channel images to find lane lines. 
@@ -75,26 +78,33 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >>
 >
 >#### ***2-2. Contrast enhancement***
->> We here enhance the image contrast in each image to more clearly distinguish line pixels from other objects.
->> First, piexls values lower than threshold in each channel image are replaced with the threshold, and then the images are normalized with the maximum and minimum pixel values.
->><pre><code>{channel_img[channel_img < threshold] = threshold
->>channel_img_noramlized = cv2.normalize(channel_img, None, 0, 255, cv2.NORM_MINMAX)}</code></pre>
+>> Here we enhance the image contrast in each channel image to more clearly distinguish line pixels from other objects.
+>> First, piexl values lower than threshold are replaced with the threshold, and then the pixels are normalized with the maximum and minimum values.
+>><pre><code>channel_img[channel_img < threshold] = threshold
+>>channel_img_noramlized = cv2.normalize(channel_img, None, 0, 255, cv2.NORM_MINMAX)</code></pre>
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/contrast_enhancement.png)
 >>
->>
 >
-더욱 선명하게 차선과 이외의 오브젝트들을 분리하기 위하여 콘트라스트 향상을 수행한다. 
-우선 각 채널들의 이미지를 트레쉬홀딩하여 낮은 값들을(불필요한) 임계값으로 대체한다.
-그 후 최대값과 최소값으로 일반화한다.
-
-1. 각 채널의 이미지에서 낮은값 억제
 >#### ***2-3. Filtering with gradient information***
+>>In gradient approach, Sobel operator is applied to calculate gradients in x- and y- directions, and then their magnitudes and orientations are calculated. Next, image pixels are thresholded with this gradient informations and the location of filtered image-pixels are saved on a gradient-mask image.
+>> You can find the code for this process in the ***img_preprocessing( )*** function of class ***Mask*** in [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/update_0505/classes.py).
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/gradient_filtering.png)
 >>
->
 
-1. 
 >#### ***2-4. Thresholding with color information***
+>> We can filter 
+>><pre><code>Y_channel_color_mask = np.zeros_like(y_channel_img)
+>>Cr_channel_color_mask = np.zeros_like(Cr_channel_img)
+>>S_channel_color_mask = np.zeros_like(S_channel_img)
+>>
+>>Y_channel_color_mask[Y_channel_img >= np.percentile(Y_channel_img_normalized, 99)] = 255
+>>Cr_channel_color_mask[Cr_channel_img >= np.percentile(Cr_channel_img_normalized, 99)] = 255
+>>S_channel_color_mask[Y_channel_img >= S_color_threshold] = 255
+>></code></pre>
+>>
+>> And then, the masks are combined.
+>><pre><code> color_mask = cv2.bitwise_or(Y_channel_color_mask, Cr_channel_color_mask)
+>> color_mask = cv2.bitwise_or(color_mask, S_channel_color_mask)</code></pre>
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/color_thresholding.png)
 >>
 >
