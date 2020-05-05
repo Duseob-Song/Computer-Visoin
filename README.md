@@ -78,7 +78,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >> We here enhance the image contrast in each image to more clearly distinguish line pixels from other objects.
 >> First, piexls values lower than threshold in each channel image are replaced with the threshold, and then the images are normalized with the maximum and minimum pixel values.
 >><pre><code>{channel_img[channel_img < threshold] = threshold
-channel_img_noramlized = cv2.normalize(channel_img, None, 0, 255, cv2.NORM_MINMAX)}</code></pre>
+>>channel_img_noramlized = cv2.normalize(channel_img, None, 0, 255, cv2.NORM_MINMAX)}</code></pre>
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/contrast_enhancement.png)
 >>
 >>
