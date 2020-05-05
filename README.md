@@ -90,7 +90,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >> You can find the code for this process in the ***img_preprocessing( )*** function of class ***Mask*** in [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/master/classes.py).
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/gradient_filtering.png)
 >>
-
+>
 >#### ***2-4. Thresholding with color information***
 >> Line pixels have high values in the contrast enhanced channel images, and we can filter them with ***np.percentile( )*** function.
 >><pre><code>Y_channel_color_mask = np.zeros_like(y_channel_img)
@@ -128,7 +128,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >></code></pre>
 >>
 >> Now we can generate Bird's eye view image with these matrices and [cv2.warpPerspectiveTransform( )](https://docs.opencv.org/2.4/modules/imgproc/doc/geometric_transformations.html) function.
->><pre><code> bird_view_img = cv2.warpPerspectiveTransform(img, M, (lines.warp_size[0], lines.warp_size[1])
+>><pre><code> bird_view_img = cv2.warpPerspectiveTransform(img, M, (lines.warp_size[0], lines.warp_size[1])</code></pre>
 >>
 >>Here's an example of the perspective transformation.
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/perspective_transform/transform.png)
