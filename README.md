@@ -43,21 +43,21 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 > 
 > First, RGB-images are transformed into YCrCb- and HLS color spaces. In this project, we use Y-, Cr- and S-channel images to find lane lines. 
 > - ***Y-channel***
-
+>
 > Y-channel images are similar to gray-scale images, so we can identify line pixels in these images using gradient approach. 
 > ![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/Y.png)
 > However, when the lane line is yellow and the road background color is light gray, it is difficult to distinguish the lane line from the background in gray-scale image. To solve this problem, we need Cr- or S-channel image.
 > ![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/Y_prob.png)
 
 > - ***S-channel*** 
-
+>
 > In General, since the lane lines has a high saturation value in clear weather, we can identify lane-line-pixels in S-channel images.
 > ![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/S.png) 
 > Note that shadows also have a high saturation value, so pixels with low values in the Y-channel image should be filtered out to identify relevant pixels.
 > ![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/S_prob.png)
 
 > - ***Cr-channel*** 
-
+>
 > In the Cr-channel image, the yellow line is easily detected, but the white lines are not identified. If the purpose is to detect only the white lines, you can use only Y- and S-channel images.
 > ![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/Cr.png)
 
