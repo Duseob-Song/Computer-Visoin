@@ -13,7 +13,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 > > * class ***Mask***: filtering image with gradient-based method and corlor-space-based thresholding
 > > * class ***Lane***: perspective transformation, find lane lines with sliding-window method
 >* [functions.py](https://github.com/DuseobSong/Lane-Detection/blob/master/functions.py): functions to record results
-
+> Video source: [https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/project_video.mp4](https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/project_video.mp4)
 ## Developement Environment
 >OS: Wndows 10 (x64), Python 3.5, OpenCV 4.2.0
 
