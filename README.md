@@ -103,7 +103,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >></code></pre>
 >>
 >> And then, the masks are combined.
->><pre><code> color_mask = cv2.bitwise_or(Y_channel_color_mask, Cr_channel_color_mask)
+>><pre><code>color_mask = cv2.bitwise_or(Y_channel_color_mask, Cr_channel_color_mask)
 >> color_mask = cv2.bitwise_or(color_mask, S_channel_color_mask)</code></pre>
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/color_thresholding.png)
 >>
@@ -112,6 +112,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >> After the gradient mask and color mask have been calculated, they are combined with ***cv2.bitwise_or( )*** function.
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/Preprocessing%20result.png)
 >> 
+>
 >
 >### 3. Find lane
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Detection.png)
@@ -130,12 +131,30 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >> Now we can generate Bird's eye view image with these matrices and [cv2.warpPerspectiveTransform( )](https://docs.opencv.org/2.4/modules/imgproc/doc/geometric_transformations.html) function.
 >><pre><code> bird_view_img = cv2.warpPerspectiveTransform(img, M, (lines.warp_size[0], lines.warp_size[1])</code></pre>
 >>
->>Here's an example of the perspective transformation.
+>>Here's the result of the perspective transformation.
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/perspective_transform/transform.png)
-
-
+>
+>
 > #### 3.2 Search windows initialization
+>> In this project, I applied sliding-window method to identify and filter out line pixels. The center points of search windows are updated with the previously detected lane lines. However, we need an algorithm to define the initial search-window-center-points.
+>> Since the yellow line in the distance is not detected, the ROI is set to the lower 2/3 part of the bird's eye view mask image.
+To estimate initial position of the lane lines, the ROI is diviedd into three sub-ROIs. Then, in each sub-ROIs, the appearance frequency histogram of nonzero pixels in the x-direction is calculated, and teh most frequent x-coordinates on the left and right half are estimated as the x-coordinates of the lane lines. 
+>>
+>> However, if the sub-ROI was set on the empty space of the dashed lines, foreign objects can affect the histogram and it may lead to a erroneous lane estimation. To prevent this, Histograms for each sub-ROIs in the first 10 frames are stacked, and the initial positions of lines are estimated with this stacked histograms.
+>><pre><code>if FRAME_COUNT < 10:
+>>    lines.get_hist_info(warped_grad_mask = bird_view_grad_mask, warped_color_mask = bird_view_color_mask)
+>></code></pre>
+>>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/lane%20detection/s_window_init_stack.png)
+>>
+>> Foreign objects and vehicle are clearly detected in the mask image, which is calculated from one frame. On the other hand, lane lines are clearly marked in the stacked mask image.
+>>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/lane%20detection/s_window_init.png)
+>>
+>>Now, we have 6 x-coordinates for lane-line estimation. Y-coordinstes are simply defined as the middle y-coordinates of each sub-ROIs. We can calculate the curve fitting coefficients for initial left and right lines with ***np.polyfit( )*** function. 
+>> Eight search windows are assigned to each of the left and right lines, and are placed in ROI one after other in y-direction. And then, we can claculate the initial x-coordinate with the curve fitting coefficients and the y-coordinates of search windows.
 
+>> The function ***init_lane_center_point( )*** in class ***Lane*** represents this process. This function is in active, when the main-code is executed or when the lines are not detected in previous frame.
+>>
+>>
 > #### 3.3 Lane estimation with sliding window method
 
 
