@@ -147,25 +147,29 @@ To estimate initial position of the lane lines, the ROI is diviedd into three su
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/lane%20detection/s_window_init_stack.png)
 >>
 >> Foreign objects and vehicle are clearly detected in the mask image, which is calculated from one frame. On the other hand, lane lines are clearly marked in the stacked mask image.
+>>
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/lane%20detection/s_window_init.png)
 >>
 >>Now, we have 6 x-coordinates for lane-line estimation. Y-coordinstes are simply defined as the middle y-coordinates of each sub-ROIs. We can calculate the curve fitting coefficients for initial left and right lines with ***np.polyfit( )*** function. 
 >> Eight search windows are assigned to each of the left and right lines, and are placed in ROI one after other in y-direction. And then, we can claculate the initial x-coordinate with the curve fitting coefficients and the y-coordinates of search windows.
+>>
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/initialization/init_windows.png)
 >>
 >> The function ***init_lane_center_point( )*** in class ***Lane*** represents this process. This function only works when the current frame is the first frame or when the lines are not detected in previous frame.
 >
 >
-> #### 3.3 Lane estimation with sliding window method
+> #### 3.3 Lane estimation using sliding window method
 >>
+>>Search windows are predefined in the previous frame, and we only need to consider the pixels inside the windows. Ego-lane-lines can be estimated using curve-fitting with these pixels. The center points of search windows are updated with these lane-lines.
+>>Now, we can generate lane mask on bied's-eye view image with these estimated lines. This lane mask is invers-perspective transformed and then applied to source frame.
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/initialization/sliding_window.png)
 
 ## Result
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/output.gif)
 >
-> ### 1. Bird-View image
+> ### 1. Bird's-eye View image
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Bird_view.gif)
 >
-> ### 2. Camera image
+> ### 2. Camera view
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Camera_view.gif)
 >
