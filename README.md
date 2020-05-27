@@ -63,7 +63,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/S_yellow_on_light_gray.png)
 >>
 >> Note that shadows also have a high saturation value, so pixels with low values in the Y-channel image should be filtered out to identify relevant pixels.
->> <pre><code> S_channel_img[Y_channel_image < shadow_threshold] = 0 </code></pre>
+>> <pre><code> S_channel_img[Y_channel_img < shadow_threshold] = 0 </code></pre>
 >>***shadow_threshold*** depends on weather condition or ilumination.
 >>
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/S_shadow_remove.png)
@@ -138,9 +138,9 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 > #### 3.2 Search windows initialization
 >> In this project, I applied sliding-window method to identify and filter out line pixels. The center points of search windows are updated with the previously detected lane lines. However, we need an algorithm to define the initial search-window-center-points.
 >> Since the yellow line in the distance is not detected, the ROI is set to the lower 2/3 part of the bird's eye view mask image.
-To estimate initial position of the lane lines, the ROI is diviedd into three sub-ROIs. Then, in each sub-ROIs, the appearance frequency histogram of nonzero pixels in the x-direction is calculated, and teh most frequent x-coordinates on the left and right half are estimated as the x-coordinates of the lane lines. 
+To estimate initial position of the lane lines, the ROI is diviedd into three sub-ROIs. Then, in each sub-ROI, the appearance frequency histogram of nonzero pixels in the x-direction is calculated, and teh most frequent x-coordinates on the left and right half are estimated as the x-coordinates of the lane lines. 
 >>
->> However, if the sub-ROI was set on the empty space of the dashed lines, foreign objects can affect the histogram and it may lead to a erroneous lane estimation. To prevent this, Histograms for each sub-ROIs in the first 10 frames are stacked, and the initial positions of lines are estimated with this stacked histograms.
+>> However, if the sub-ROI was set on the empty space of the dashed lines, foreign objects can affect the histogram and it may lead to a erroneous lane estimation. To prevent this, Histograms for each sub-ROI in the first 10 frames are stacked, and the initial positions of lines are estimated with this stacked histograms.
 >><pre><code>if FRAME_COUNT < 10:
 >>    lines.get_hist_info(warped_grad_mask = bird_view_grad_mask, warped_color_mask = bird_view_color_mask)
 >></code></pre>
@@ -150,7 +150,7 @@ To estimate initial position of the lane lines, the ROI is diviedd into three su
 >>
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/lane%20detection/s_window_init.png)
 >>
->>Now, we have 6 x-coordinates for lane-line estimation. Y-coordinstes are simply defined as the middle y-coordinates of each sub-ROIs. We can calculate the curve fitting coefficients for initial left and right lines with ***np.polyfit( )*** function. 
+>>Now, we have 6 x-coordinates for lane-line estimation. Y-coordinstes are simply defined as the middle y-coordinates of each sub-ROI. We can calculate the curve fitting coefficients for initial left and right lines with ***np.polyfit( )*** function. 
 >> Eight search windows are assigned to each of the left and right lines, and are placed in ROI one after other in y-direction. And then, we can claculate the initial x-coordinate with the curve fitting coefficients and the y-coordinates of search windows.
 >>
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/initialization/init_windows.png)
@@ -160,8 +160,8 @@ To estimate initial position of the lane lines, the ROI is diviedd into three su
 >
 > #### 3.3 Lane estimation using sliding window method
 >>
->>Search windows are predefined in the previous frame, and we only need to consider the pixels inside the windows. Ego-lane-lines can be estimated using curve-fitting with these pixels. The center points of search windows are updated with these lane-lines.
->>Now, we can generate lane mask on bied's-eye view image with these estimated lines. This lane mask is invers-perspective transformed and then applied to source frame.
+>>Search windows are predefined in the previous frame, and we only need to consider the pixels inside the windows. Ego-lane-lines can be estimated using curve-fitting with these pixels. The center points of search windows are updated with these lane lines.
+>>Now, we can generate lane mask on bied's eye view image with these estimated lines. This lane mask is invers-perspective transformed and then applied to source frame.
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/initialization/sliding_window.png)
 
 ## Result
