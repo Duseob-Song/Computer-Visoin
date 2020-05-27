@@ -151,12 +151,14 @@ To estimate initial position of the lane lines, the ROI is diviedd into three su
 >>
 >>Now, we have 6 x-coordinates for lane-line estimation. Y-coordinstes are simply defined as the middle y-coordinates of each sub-ROIs. We can calculate the curve fitting coefficients for initial left and right lines with ***np.polyfit( )*** function. 
 >> Eight search windows are assigned to each of the left and right lines, and are placed in ROI one after other in y-direction. And then, we can claculate the initial x-coordinate with the curve fitting coefficients and the y-coordinates of search windows.
-
->> The function ***init_lane_center_point( )*** in class ***Lane*** represents this process. This function is in active, when the main-code is executed or when the lines are not detected in previous frame.
+>>[!image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/initialization/init_windows.png)
 >>
->>
+>> The function ***init_lane_center_point( )*** in class ***Lane*** represents this process. This function only works when the current frame is the first frame or when the lines are not detected in previous frame.
+>
+>
 > #### 3.3 Lane estimation with sliding window method
-
+>>
+>>[!image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/initialization/sliding_window.png)
 
 ## Result
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/output.gif)
