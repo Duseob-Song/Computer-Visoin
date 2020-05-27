@@ -161,7 +161,7 @@ To estimate initial position of the lane lines, the ROI is diviedd into three su
 > #### 3.3 Lane estimation using sliding window method
 >>
 >>Search windows are predefined in the previous frame, and we only need to consider the pixels inside the windows. Ego-lane-lines can be estimated using curve-fitting with these pixels. The center points of search windows are updated with these lane lines.
->>Now, we can generate lane mask on bied's eye view image with these estimated lines. This lane mask is invers-perspective transformed and then applied to source frame.
+>>Now, we can generate lane mask on bird's eye view image with these estimated lines. This lane mask is inverse-perspective transformed and then applied to source frame.
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/initialization/sliding_window.png)
 
 ## Result
@@ -173,3 +173,12 @@ To estimate initial position of the lane lines, the ROI is diviedd into three su
 > ### 2. Camera view
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Camera_view.gif)
 >
+
+## Discussion and future works
+>
+> - By the perspective transformation, pitch and roll angle affects on the perspective matrix and it can lead to erroneous result. In order to solve this problem, the src coordinates should be dynamically calculated with respect to these angles.
+> 
+> - This algorithm works well, if other objects, such as vehicles, are not on the lane lines. If the pixels of vehicles are detected in the search windows, the algorithm will recognize these pixels as lane lines. To solve this problem, we need vehicle detection algorithms.
+>
+> - From the video stream, we can derive road information, such as radius of curvature, direction of curve and deviation between ego-position and lane center line.
+> - 
