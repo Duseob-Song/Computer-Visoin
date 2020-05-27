@@ -3,7 +3,6 @@ Lane Detection Algorithm
 
 ## Objective
 The goal of this project is to develope an lane detection algorithm for LDW-systems(Lane Departure Warning Systems).
-
 In this Project, we'll use a gradient-based method and a color-based method to extract information to identify road lanes.
 
 ## Files
@@ -18,6 +17,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >OS: Wndows 10 (x64), Python 3.5, OpenCV 4.2.0
 
 ## Structure
+> The main pipeline refers to the following project: ***Advanced lane finding*** of Udacity's Self-Driving Car Engineering Nanodegree
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Structure.png)
 >The main pipeline is devided into three main parts: camera calibration, image preprocessing and lane detection
 >
