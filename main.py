@@ -18,7 +18,7 @@ calibration = Calib()
 
 calibration.calibration()
 
-video_name = 'project_video.mp4'
+video_name = './vid/project_video.mp4'
 
 VIDEO_SAVE_PATH = './result/'
 if not os.path.exists(VIDEO_SAVE_PATH):
@@ -98,6 +98,8 @@ if  __name__ == '__main__':
             end2 = time()
             
             scr0 = screen0(img, result)
+            cv2.rectangle(scr0, (10,0), (860,20), (0,0,0), -1)
+            cv2.putText(scr0, 'Video source: https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/project_video.mp4', (18, 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255,255,255))
             cv2.imshow('Result', scr0)
             writer0.write(scr0)
 #            
@@ -109,13 +111,19 @@ if  __name__ == '__main__':
             
             inv_trans_mask_combined = cv2.warpPerspective(lane_mask_combined, lines.Minv, (width, height))
             scr1 = screen1(img, combined_mask_color, inv_trans_mask_combined, result)
+            cv2.rectangle(scr1, (10,0), (860,20), (0,0,0), -1)
+            cv2.putText(scr1, 'Video source: https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/project_video.mp4', (18, 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255,255,255))
             warped_combined_mask, warped_combined_mask_color = Lane_mask.combine(mask1 = warped_grad_mask, mask2 = warped_color_mask)
             windows_mask_c = np.dstack([windows_mask, np.zeros_like(windows_mask), np.zeros_like(windows_mask)])
             warped_combined_mask_color = cv2.addWeighted(warped_combined_mask_color, 1, windows_mask_c, 1, 0)
             
             warped_result = cv2.addWeighted(warped_img, 1, lane_mask_combined, 0.9, 0)
             scr2 = screen2(warped_img, warped_combined_mask_color, lane_mask_combined, warped_result)
+            cv2.rectangle(scr2, (10,0), (860,20), (0,0,0), -1)
+            cv2.putText(scr2, 'Video source: https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/project_video.mp4', (18, 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255,255,255))
             scr3 = screen3(img, result, warped_img, warped_result)
+            cv2.rectangle(scr3, (10,0), (860,20), (0,0,0), -1)
+            cv2.putText(scr3, 'Video source: https://github.com/udacity/CarND-Advanced-Lane-Lines/blob/master/project_video.mp4', (18, 15), cv2.FONT_HERSHEY_SIMPLEX, 0.4, (255,255,255))
                         
             cv2.imshow('On Frame', scr1)
             cv2.imshow('Bird-view', scr2)

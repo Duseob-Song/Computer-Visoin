@@ -52,7 +52,7 @@ class Calib:
             else:
                 continue
             
-        ret, self.mtx, self.dist, rvecs, tvecs = cv2.calibrateCamera(objpts, imgpts, img.shape[::-1], None, None)
+        ret, self.mtx, self.dist, _, _ = cv2.calibrateCamera(objpts, imgpts, img.shape[::-1], None, None)
         
     def undistort(self, img):
         return cv2.undistort(img, self.mtx, self.dist, None, self.mtx)
@@ -62,9 +62,9 @@ class Mask:
     def __init__(self):
         self.img_resize = (1280, 720)
         
-        self.gray_img_thresh = 100
+        self.Y_img_thresh = 100
         self.Cr_img_thresh = 120
-        self.s_img_thresh = 180
+        self.S_img_thresh = 180
         
         self.ksize = 3
         self.sobel_x_thresh = (50, 100)
@@ -100,76 +100,79 @@ class Mask:
         img = cv2.resize(img, self.img_resize)
         height, width = img.shape[:2]
         
-        gray_img, Cr_img, _ = cv2.split(cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb))
-        _, _, s_img = cv2.split(cv2.cvtColor(img, cv2.COLOR_BGR2HLS))
-        gray_ = gray_img.copy()
+        Y_img, Cr_img, _ = cv2.split(cv2.cvtColor(img, cv2.COLOR_BGR2YCrCb))
+        _, _, S_img = cv2.split(cv2.cvtColor(img, cv2.COLOR_BGR2HLS))
+        Y_ = Y_img.copy()
         
         # contrast enhencement: thresholding + normalization
-        gray_img[gray_img <= self.gray_img_thresh] = self.gray_img_thresh
+        Y_img[Y_img <= self.Y_img_thresh] = self.Y_img_thresh
         Cr_img[Cr_img <= self.Cr_img_thresh] = self.Cr_img_thresh
-        s_img[s_img <= self.s_img_thresh] = self.s_img_thresh
+        S_img[S_img <= self.S_img_thresh] = self.S_img_thresh
         
-        gray_img_normalized = cv2.normalize(gray_img, None, 0, 255, cv2.NORM_MINMAX)
+        Y_img_normalized = cv2.normalize(Y_img, None, 0, 255, cv2.NORM_MINMAX)
         Cr_img_normalized = cv2.normalize(Cr_img, None, 0, 255, cv2.NORM_MINMAX)
-        s_img_normalized = cv2.normalize(s_img, None, 0, 255, cv2.NORM_MINMAX)
-        Cr_img_normalized[gray_ < 50] = 0
-        s_img_normalized[gray_ < 50] = 0 # Shadow shows hig saturation
+        S_img_normalized = cv2.normalize(S_img, None, 0, 255, cv2.NORM_MINMAX)
+        
+        Cr_img_normalized[Y_ < 50] = 0
+        S_img_normalized[Y_ < 50] = 0 # Shadow shows high saturation
         
         # mask from gradient information
-        x_grad_gray = cv2.Sobel(gray_img_normalized, cv2.CV_32F, 1, 0, ksize = self.ksize)
-        y_grad_gray = cv2.Sobel(gray_img_normalized, cv2.CV_32F, 0, 1, ksize = self.ksize)
+        x_grad_Y = cv2.Sobel(Y_img_normalized, cv2.CV_32F, 1, 0, ksize = self.ksize)
+        y_grad_Y = cv2.Sobel(Y_img_normalized, cv2.CV_32F, 0, 1, ksize = self.ksize)
         
         x_grad_Cr = cv2.Sobel(Cr_img_normalized, cv2.CV_32F, 1, 0, ksize = self.ksize)
         y_grad_Cr = cv2.Sobel(Cr_img_normalized, cv2.CV_32F, 0, 1, ksize = self.ksize)
         
-        x_grad_s = cv2.Sobel(s_img_normalized, cv2.CV_32F, 1, 0, ksize = self.ksize)
-        y_grad_s = cv2.Sobel(s_img_normalized, cv2.CV_32F, 0, 1, ksize = self.ksize)
+        x_grad_S = cv2.Sobel(S_img_normalized, cv2.CV_32F, 1, 0, ksize = self.ksize)
+        y_grad_S = cv2.Sobel(S_img_normalized, cv2.CV_32F, 0, 1, ksize = self.ksize)
         
-        x_grad_gray_abs = np.abs(x_grad_gray)
-        y_grad_gray_abs = np.abs(y_grad_gray)
+        x_grad_Y_abs = np.abs(x_grad_Y)
+        y_grad_Y_abs = np.abs(y_grad_Y)
         
         x_grad_Cr_abs = np.abs(x_grad_Cr)
         y_grad_Cr_abs = np.abs(y_grad_Cr)
         
-        x_grad_s_abs = np.abs(x_grad_s)
-        y_grad_s_abs = np.abs(y_grad_s)
+        x_grad_S_abs = np.abs(x_grad_S)
+        y_grad_S_abs = np.abs(y_grad_S)
         
-        x_grad_gray_normalized = cv2.normalize(x_grad_gray_abs, None, 0, 255, cv2.NORM_MINMAX)
-        y_grad_gray_normalized = cv2.normalize(y_grad_gray_abs, None, 0, 255, cv2.NORM_MINMAX)
+        x_grad_Y_normalized = cv2.normalize(x_grad_Y_abs, None, 0, 255, cv2.NORM_MINMAX)
+        y_grad_Y_normalized = cv2.normalize(y_grad_Y_abs, None, 0, 255, cv2.NORM_MINMAX)
         
         x_grad_Cr_normalized = cv2.normalize(x_grad_Cr_abs, None, 0, 255, cv2.NORM_MINMAX)
         y_grad_Cr_normalized = cv2.normalize(y_grad_Cr_abs, None, 0, 255, cv2.NORM_MINMAX)
         
-        x_grad_s_normalized = cv2.normalize(x_grad_s_abs, None, 0, 255, cv2.NORM_MINMAX)
-        y_grad_s_normalized = cv2.normalize(y_grad_s_abs, None, 0, 255, cv2.NORM_MINMAX)
+        x_grad_S_normalized = cv2.normalize(x_grad_S_abs, None, 0, 255, cv2.NORM_MINMAX)
+        y_grad_S_normalized = cv2.normalize(y_grad_S_abs, None, 0, 255, cv2.NORM_MINMAX)
         
-        x_grad_gray_mask = cv2.inRange(x_grad_gray_normalized, self.sobel_x_thresh[0], self.sobel_x_thresh[1])
-        y_grad_gray_mask = cv2.inRange(y_grad_gray_normalized, self.sobel_y_thresh[0], self.sobel_y_thresh[1])
+        x_grad_Y_mask = cv2.inRange(x_grad_Y_normalized, self.sobel_x_thresh[0], self.sobel_x_thresh[1])
+        y_grad_Y_mask = cv2.inRange(y_grad_Y_normalized, self.sobel_y_thresh[0], self.sobel_y_thresh[1])
         
         x_grad_Cr_mask = cv2.inRange(x_grad_Cr_normalized, self.sobel_x_thresh[0], self.sobel_x_thresh[1])
         y_grad_Cr_mask = cv2.inRange(y_grad_Cr_normalized, self.sobel_y_thresh[0], self.sobel_y_thresh[1])
         
-        x_grad_s_mask = cv2.inRange(x_grad_s_normalized, self.sobel_x_thresh[0], self.sobel_x_thresh[1])
-        y_grad_s_mask = cv2.inRange(y_grad_s_normalized, self.sobel_y_thresh[0], self.sobel_y_thresh[1])
+        x_grad_S_mask = cv2.inRange(x_grad_S_normalized, self.sobel_x_thresh[0], self.sobel_x_thresh[1])
+        y_grad_S_mask = cv2.inRange(y_grad_S_normalized, self.sobel_y_thresh[0], self.sobel_y_thresh[1])
         
-        gray_filtered_mask = self.grad_filtering(x_grad = x_grad_gray, y_grad = y_grad_gray, mag_thresh = self.mag_thresh, ori_thresh = self.ori_thresh)
+        Y_filtered_mask = self.grad_filtering(x_grad = x_grad_Y, y_grad = y_grad_Y, mag_thresh = self.mag_thresh, ori_thresh = self.ori_thresh)
         Cr_filtered_mask = self.grad_filtering(x_grad = x_grad_Cr, y_grad = y_grad_Cr, mag_thresh = self.mag_thresh, ori_thresh = self.ori_thresh)
-        s_filtered_mask = self.grad_filtering(x_grad = x_grad_s, y_grad = y_grad_s, mag_thresh = self.mag_thresh, ori_thresh = self.ori_thresh)
+        S_filtered_mask = self.grad_filtering(x_grad = x_grad_S, y_grad = y_grad_S, mag_thresh = self.mag_thresh, ori_thresh = self.ori_thresh)
         
-        gray_mask = np.zeros_like(gray_img, dtype = np.uint8)
+        Y_mask = np.zeros_like(Y_img, dtype = np.uint8)
         Cr_mask = np.zeros_like(Cr_img, dtype = np.uint8)
-        s_mask = np.zeros_like(s_img, dtype = np.uint8)
+        S_mask = np.zeros_like(S_img, dtype = np.uint8)
         
-        gray_mask[(x_grad_gray_mask != 0) | (y_grad_gray_mask != 0) | (gray_filtered_mask != 0)] = 255
+        Y_mask[(x_grad_Y_mask != 0) | (y_grad_Y_mask != 0) | (Y_filtered_mask != 0)] = 255
         Cr_mask[(x_grad_Cr_mask != 0) | (y_grad_Cr_mask != 0) | (Cr_filtered_mask != 0)] = 255
-        s_mask[(x_grad_s_mask != 0) | (y_grad_s_mask != 0) | (s_filtered_mask != 0)] = 255
+        S_mask[(x_grad_S_mask != 0) | (y_grad_S_mask != 0) | (S_filtered_mask != 0)] = 255
         
-        grad_mask = cv2.bitwise_or(gray_mask, s_mask)
-        grad_mask = cv2.bitwise_and(grad_mask, gray_mask) + cv2.bitwise_and(grad_mask, s_mask)
+        grad_mask = cv2.bitwise_or(Y_mask, S_mask)
+        grad_mask = cv2.bitwise_and(grad_mask, Y_mask) + cv2.bitwise_and(grad_mask, S_mask)
         
         # mask from color information
         color_mask = np.zeros_like(grad_mask)
-        color_mask[(gray_img_normalized >= np.percentile(gray_img_normalized, 99)) | (Cr_img_normalized >= np.percentile(Cr_img_normalized, 99))|(s_img_normalized >= 200)] = 255
+        color_mask[(Y_img_normalized >= np.percentile(Y_img_normalized, 99)) | \
+                   (Cr_img_normalized >= np.percentile(Cr_img_normalized, 99))| \
+                   (S_img_normalized >= 200)] = 255
         
         grad_mask[height - max(height//9,1):, :] = 0
         color_mask[height - max(height//9,1):, :] = 0
@@ -197,8 +200,8 @@ class Lane:
         self.detected_left = False
         self.detected_right = False
         
-        self.warp_src_vertices = []
-        self.warp_dst_vertices = []
+        self.warp_src_vertices = None
+        self.warp_dst_vertices = None
         
         self.warped_size = (400,1200)
         self.lane_width = 150 # in pixel
@@ -210,11 +213,11 @@ class Lane:
         self.window_size = ()
         self.detected_pts_limit = 1000
         
-        self.left_line_pts       = []
-        self.left_line_fit_coeff = []
+        self.left_line_pts       = None
+        self.left_line_fit_coeff = None
         
-        self.right_line_pts       = []
-        self.right_line_fit_coeff = []
+        self.right_line_pts       = None
+        self.right_line_fit_coeff = None
         
         self.left_windows_centers = np.array([])
         self.right_windows_centers = np.array([])
@@ -222,9 +225,19 @@ class Lane:
         self.new_right_windows_centers = np.array([])
         
         # ego-position-estimation
-        self.left_x_st = []
-        self.right_x_st = []
-
+        self.left_x_st = None  # [pixel]
+        self.right_x_st = None # [pixel]
+        
+        # raod information
+        self.__ego = 200 # [pixel]
+        self.__x_resolution = (3.7/136) # lane width : about 3.7m (12ft), 136 pixel 
+        self.__y_resolution = (15/230) # dashed line length with empty space: about 15m (50 ft), 230 pixel
+        self.curves = None
+        self.left_curvature = None  # [m]
+        self.right_curvature = None # [m]
+        self.avg_curvature = None # [m]
+        self.deviation = None # [m]
+        
     def set_src(self, img_width, left_bottom, left_top):
         x_min, y_min = left_bottom[0], left_bottom[1]
         x_max, y_max = left_top[0], left_top[1]
@@ -319,10 +332,6 @@ class Lane:
         y_pts_left = []
         x_pts_right = []
         y_pts_right = []
-        
-        self.chk_left = []
-        self.chk_right = []
-        self.chk_tmp = []
         
         height, width = warped_grad_mask.shape[:2]
         
@@ -468,6 +477,8 @@ class Lane:
             self.left_coeff = left_coeff
             self.left_line_pts = left_pts
             
+            self.left_x_st = x_left_[-1]
+            
             if self.debug == True:
                 self.left_cand = np.vstack([x_pts_left, y_pts_left]).T
             
@@ -483,7 +494,9 @@ class Lane:
             self.detected_right = True
             self.right_coeff = right_coeff
             self.right_line_pts = right_pts
-
+            
+            self.right_x_st = x_right_[-1]
+            
             if self.debug == True:
                 self.right_cand = np.vstack([x_pts_right, y_pts_right]).T
         
@@ -494,7 +507,27 @@ class Lane:
             
         tmp_x_right = np.int32(self.right_coeff[0] * (y_center_pts ** 2) + self.right_coeff[1]*y_center_pts + self.right_coeff[2])
         self.new_right_windows_centers = np.vstack([tmp_x_right, y_center_pts]).T
-            
+        
+        # ego-position estimation
+        if (self.detected_left == True) and (self.detected_right == True):
+            self.deviation = ((self.left_x_st + self.right_x_st) / 2 - self.__ego) * self.__x_resolution
+    
+    def curvature(self):
+        y = self.left_line_pts[:,1]
+        left_x = self.left_line_pts[:,0]
+        right_x = self.right_line_pts[:,0]
+        
+        left_x = left_x[::-1]
+        right_x = right_x[::-1]
+        
+        left_curve_coeff = np.polyfit(y * self.__y_resolution, left_x * self.__x_resolution, 2)
+        right_curve_coeff = np.polyfit(y * self.__y_resolution, right_x * self.__x_resolution, 2)
+        
+        # calculate radius of curvature
+        self.left_curvature = ((1 + (2 * left_curve_coeff[0] * y * self.__y_resolution + left_curve_coeff[1])**2) **1.5) / np.absolute(2* left_curve_coeff[0])
+        self.right_curvature = ((1 + (2 * right_curve_coeff[0] * y * self.__y_resolution + right_curve_coeff[1])**2) **1.5) / np.absolute(2* right_curve_coeff[0])
+        self.avg_curvature = (self.left_curvature + self.right_curvature)/2
+        
     def lane_mask(self):
         line_mask = np.zeros([self.warped_size[1], self.warped_size[0]], dtype = np.uint8)
         lane_mask = np.zeros([self.warped_size[1], self.warped_size[0]], dtype = np.uint8)
@@ -533,15 +566,48 @@ class Lane:
             cv2.polylines(windows_mask, [window_vertices_right], True, 255, 3)
             
         return windows_mask
-'''
-def draw_on_img(img, mask, color = [0,0,255], beta = 1):
-    
-    coloring = np.zeros_like(img)
-    coloring[mask != 0] = color
-    result = cv2.addWeighted(img, 1, coloring, beta, 0)
-    
-    return result
-'''
-    
+        
+    def road_information(self):
+        curve_dir = (self.left_line_pts[0,0] + self.right_line_pts[0,0] - self.left_line_pts[-1,0] - self.right_line_pts[-1,0])/2
+        
+        if self.avg_curvature > 2100:
+            curves = 'Straight'
+            curvature_radius = 0
+        elif self.avg_curvature <= 2100 and curve_dir < -30:
+            curves = 'Left_curve'
+            curvature_radius = self.avg_curvature
+        elif self.avg_curvature <= 2100 and curve_dir > 30:
+            curves = 'Right_curve'
+            curvature_radius = self.avg_curvature
+        else:
+            curves = 'Unidentified'
+            curvature_radius = self.avg_curvature
+        
+        deviation = ((self.left_x_st + self.right_x_st) / 2 - self.__ego) * self.__x_resolution
+        self.deviation = deviation
+        
+        return curves, curvature_radius, deviation
+
+    def disp_road_info(self, img):
+        
+        height, width = img.shape[:2]
+        disp = img.copy()
+        
+        curves, curvature_radius, deviation = self.road_information()
+        
+        cv2.rectangle(disp, (0,0), (1280, 150), (0,0,0), -1)
+        cv2.line(disp, (500, 0), (500, 150), (255,255,255), 3)
+        cv2.putText(disp, 'Road Information', (30,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255),3)
+        cv2.putText(disp, 'Curve Direction: ' + curves, (30,80), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+        cv2.putText(disp, 'Deviation      : {0:0.4f}m'.format(deviation), (30,130), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+        
+        cv2.putText(disp, 'Radius of curvature (left) : {0:0.4f}m'.format(self.left_curvature), (530,30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+        cv2.putText(disp, 'Radius of curvature (right): {0:0.4f}m'.format(self.right_curvature), (530,80), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+        cv2.putText(disp, 'Radius of curvature (avg.) : {0:0.4f}m'.format(curvature_radius), (530,130), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+        
+        dst = cv2.addWeighted(img, 0.5,disp, 0.5, 0)
+        
+        return dst
+
 
     
