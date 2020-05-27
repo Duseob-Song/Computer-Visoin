@@ -181,4 +181,4 @@ To estimate initial position of the lane lines, the ROI is diviedd into three su
 > - This algorithm works well, if other objects, such as vehicles, are not on the lane lines. If the pixels of vehicles are detected in the search windows, the algorithm will recognize these pixels as lane lines. To solve this problem, we need vehicle detection algorithms.
 >
 > - From the video stream, we can derive road information, such as radius of curvature, direction of curve and deviation between ego-position and lane center line.
-> - 
+> - Every loop takes more than 0.25 second, it means, it doesn't work in real time. Most of the computing time is used to preprocess the images. In order to reduce computing time, the image size must be reduced or we can bound image by setting ROI on source image.
