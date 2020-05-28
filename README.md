@@ -165,6 +165,10 @@ To estimate initial position of the lane lines, the ROI is diviedd into three su
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/initialization/sliding_window.png)
 
 ## Result
+> ### Result (Road information displayed)
+>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/lane_detection(output).gif)
+> 
+> ### Compare original frame with lane masked frame
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/output.gif)
 >
 > ### 1. Bird's-eye View image
@@ -173,12 +177,12 @@ To estimate initial position of the lane lines, the ROI is diviedd into three su
 > ### 2. Camera view
 >![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Camera_view.gif)
 >
-
 ## Discussion and future works
 >
 > - By the perspective transformation, pitch and roll angle affects on the perspective matrix and it can lead to erroneous result. In order to solve this problem, the src coordinates should be dynamically calculated with respect to these angles.
 > 
 > - This algorithm works well, if other objects, such as vehicles, are not on the lane lines. If the pixels of vehicles are detected in the search windows, the algorithm will recognize these pixels as lane lines. To solve this problem, we need vehicle detection algorithms.
 >
-> - From the video stream, we can derive road information, such as radius of curvature, direction of curve and deviation between ego-position and lane center line.
+> - <s>From the video stream, we can derive road information, such as radius of curvature, direction of curve and deviation between ego-position and lane center line.</s> (updated - 05/28/2020)
+>
 > - Every loop takes more than 0.25 second, it means, it doesn't work in real time. Most of the computing time is used to preprocess the images. In order to reduce computing time, the image size must be reduced or we can bound image by setting ROI on source image.
