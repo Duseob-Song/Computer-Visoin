@@ -516,16 +516,17 @@ class Lane:
         y = self.left_line_pts[:,1]
         left_x = self.left_line_pts[:,0]
         right_x = self.right_line_pts[:,0]
+        y_max = np.max(y) # y-coordinate at bottom of the image
         
         left_x = left_x[::-1]
         right_x = right_x[::-1]
         
         left_curve_coeff = np.polyfit(y * self.__y_resolution, left_x * self.__x_resolution, 2)
         right_curve_coeff = np.polyfit(y * self.__y_resolution, right_x * self.__x_resolution, 2)
-        
+    
         # calculate radius of curvature
-        self.left_curvature = ((1 + (2 * left_curve_coeff[0] * y * self.__y_resolution + left_curve_coeff[1])**2) **1.5) / np.absolute(2* left_curve_coeff[0])
-        self.right_curvature = ((1 + (2 * right_curve_coeff[0] * y * self.__y_resolution + right_curve_coeff[1])**2) **1.5) / np.absolute(2* right_curve_coeff[0])
+        self.left_curvature = ((1 + (2 * left_curve_coeff[0] * y_max * self.__y_resolution + left_curve_coeff[1])**2) **1.5) / np.absolute(2* left_curve_coeff[0])
+        self.right_curvature = ((1 + (2 * right_curve_coeff[0] * y_max * self.__y_resolution + right_curve_coeff[1])**2) **1.5) / np.absolute(2* right_curve_coeff[0])
         self.avg_curvature = (self.left_curvature + self.right_curvature)/2
         
     def lane_mask(self):
@@ -568,37 +569,39 @@ class Lane:
         return windows_mask
         
     def road_information(self):
+        self.curvature()
+        
         curve_dir = (self.left_line_pts[0,0] + self.right_line_pts[0,0] - self.left_line_pts[-1,0] - self.right_line_pts[-1,0])/2
         
         if self.avg_curvature > 2100:
-            curves = 'Straight'
+            curve = 'Straight'
             curvature_radius = 0
         elif self.avg_curvature <= 2100 and curve_dir < -30:
-            curves = 'Left_curve'
+            curve = 'Left_curve'
             curvature_radius = self.avg_curvature
         elif self.avg_curvature <= 2100 and curve_dir > 30:
-            curves = 'Right_curve'
+            curve = 'Right_curve'
             curvature_radius = self.avg_curvature
         else:
-            curves = 'Unidentified'
+            curve = 'Unidentified'
             curvature_radius = self.avg_curvature
         
         deviation = ((self.left_x_st + self.right_x_st) / 2 - self.__ego) * self.__x_resolution
         self.deviation = deviation
         
-        return curves, curvature_radius, deviation
+        return curve, curvature_radius, deviation
 
     def disp_road_info(self, img):
         
         height, width = img.shape[:2]
         disp = img.copy()
         
-        curves, curvature_radius, deviation = self.road_information()
+        curve, curvature_radius, deviation = self.road_information()
         
         cv2.rectangle(disp, (0,0), (1280, 150), (0,0,0), -1)
         cv2.line(disp, (500, 0), (500, 150), (255,255,255), 3)
         cv2.putText(disp, 'Road Information', (30,30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255,255,255),3)
-        cv2.putText(disp, 'Curve Direction: ' + curves, (30,80), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
+        cv2.putText(disp, 'Curve Direction: ' + curve, (30,80), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
         cv2.putText(disp, 'Deviation      : {0:0.4f}m'.format(deviation), (30,130), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
         
         cv2.putText(disp, 'Radius of curvature (left) : {0:0.4f}m'.format(self.left_curvature), (530,30), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255,255,255), 2)
