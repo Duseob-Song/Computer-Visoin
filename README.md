@@ -18,7 +18,9 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 
 ## Structure
 > The main pipeline refers to the following project: ***Advanced lane finding*** of Udacity's Self-Driving Car Engineering Nanodegree
-><center>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Structure.png)</center>
+<center>
+>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Structure.png)
+</center>
 >The main pipeline is devided into three main parts: camera calibration, image preprocessing and lane detection
 >
 >***1) Camera Calibration***- Some pinhole cameras introduce significant distortion to images with an erroneous infotmation. To Correct the distorted image, we need camera matrix and distortion coefficients, and they can be calculated using a set of chessboard images and applied to the video frames.
@@ -39,7 +41,9 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 > ![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/calibration/calibration.png)
 
 >### 2. Image preprocessing
-><center>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Preprocessing.png)</center>
+<center>
+>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Preprocessing.png)
+</center>
 >
 > You can find the code for image preprocessing in class ***Mask*** in [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/master/classes.py).
 >
