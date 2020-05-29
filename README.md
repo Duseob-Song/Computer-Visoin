@@ -18,7 +18,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 
 ## Structure
 > The main pipeline refers to the following project: ***Advanced lane finding*** of Udacity's Self-Driving Car Engineering Nanodegree
->![image alt <>](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Structure.png)
+><p align="center"> <img src="https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Structure.png"></p>
 >The main pipeline is devided into three main parts: camera calibration, image preprocessing and lane detection
 >
 >***1) Camera Calibration***- Some pinhole cameras introduce significant distortion to images with an erroneous infotmation. To Correct the distorted image, we need camera matrix and distortion coefficients, and they can be calculated using a set of chessboard images and applied to the video frames.
