@@ -39,7 +39,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 > ![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/calibration/calibration.png)
 
 >### 2. Image preprocessing
->![image alt <>](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Preprocessing.png)
+><p align = "center"> <img src="https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Preprocessing.png"></p>
 >
 > You can find the code for image preprocessing in class ***Mask*** in [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/master/classes.py).
 >
