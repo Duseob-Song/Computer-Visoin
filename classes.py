@@ -232,7 +232,7 @@ class Lane:
         self.__ego = 200 # [pixel]
         self.__x_resolution = (3.7/136) # lane width : about 3.7m (12ft), 136 pixel 
         self.__y_resolution = (15/230) # dashed line length with empty space: about 15m (50 ft), 230 pixel
-        self.curves = None
+        self.curve = None
         self.left_curvature = None  # [m]
         self.right_curvature = None # [m]
         self.avg_curvature = None # [m]
@@ -588,6 +588,7 @@ class Lane:
         
         deviation = ((self.left_x_st + self.right_x_st) / 2 - self.__ego) * self.__x_resolution
         self.deviation = deviation
+        self.curve = curve
         
         return curve, curvature_radius, deviation
 
