@@ -131,7 +131,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >><pre><code> bird_view_img = cv2.warpPerspectiveTransform(img, M, (lines.warp_size[0], lines.warp_size[1])</code></pre>
 >>
 >>Here's the result of the perspective transformation.  
->><p align = "center"><img src = ""https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/perspective_transform/transform.png"></p>  
+>><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/perspective_transform/transform.png"></p>  
 >
 >
 > #### 3.2 Search windows initialization
@@ -152,7 +152,7 @@ To estimate initial position of the lane lines, the ROI is diviedd into three su
 >>Now, we have 6 x-coordinates for lane-line estimation. Y-coordinstes are simply defined as the middle y-coordinates of each sub-ROI. We can calculate the curve fitting coefficients for initial left and right lines with ***np.polyfit( )*** function. 
 >> Eight search windows are assigned to each of the left and right lines, and are placed in ROI one after other in y-direction. And then, we can claculate the initial x-coordinate with the curve fitting coefficients and the y-coordinates of search windows.  
 >>
->><p aligne = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/initialization/init_windows.png"></p>  
+>><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/initialization/init_windows.png"></p>  
 >>
 >> The function ***init_lane_center_point( )*** in class ***Lane*** represents this process. This function only works when the current frame is the first frame or when the lines are not detected in previous frame.
 >
