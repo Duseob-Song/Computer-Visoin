@@ -36,7 +36,7 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >
 >(Further information: [OpenCV Tutorial - Camera Calibration](https://docs.opencv.org/master/dc/dbb/tutorial_py_calibration.html))
 >
-> ![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/calibration/calibration.png)
+> <p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/calibration/calibration.png"></p>
 
 >### 2. Image preprocessing
 ><p align = "center"> <img src="https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Preprocessing.png"></p>
@@ -49,46 +49,45 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >> - ***Y-channel***
 >>
 >> Y-channel images are similar to gray-scale images, so we can identify line pixels in these images using gradient approach. 
->> ![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/Y.png)
+>> <p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/Y.png"></p>
 >>
 >> However, when the lane line is yellow and the road background color is light gray, it is difficult to distinguish the lane line from the background in gray-scale image. To solve this problem, we need Cr- or S-channel image.
->> ![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/Y_prob.png)
+>> <p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/Y_prob.png"></p>
 >>
 >> - ***S-channel*** 
 >>
->>In General, since the lane lines has a high saturation value in clear weather, we can identify lane-line-pixels in S-channel images.
->>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/S.png) 
+>>In General, since the lane lines has a high saturation value in clear weather, we can identify lane-line-pixels in S-channel images.  
+>><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/S.png"></p>  
 >>
 >>In S-channel image, the yellow lines on light-gray background can be identified.
->>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/S_yellow_on_light_gray.png)
+>><p align = "center"><img src ="https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/S_yellow_on_light_gray.png"></p>  
 >>
 >> Note that shadows also have a high saturation value, so pixels with low values in the Y-channel image should be filtered out to identify relevant pixels.
 >> <pre><code> S_channel_img[Y_channel_img < shadow_threshold] = 0 </code></pre>
->>***shadow_threshold*** depends on weather condition or ilumination.
+>>***shadow_threshold*** depends on weather condition or ilumination.  
 >>
->>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/S_shadow_remove.png)
+>><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/S_shadow_remove.png"></p>  
 >>
 >> - ***Cr-channel*** 
 >>
->>In the Cr-channel image, yellow lines are easily detected, but the white lines are not identified. If the purpose is to detect only the white lines, you can use only Y- and S-channel images.
->>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/Cr.png)
->>
->> Like S-channel image, yellow lines on light-gray backgraound can be identified in Cr-channel image.
->>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/Cr_yellow_on_light_gray.png)
+>>In the Cr-channel image, yellow lines are easily detected, but the white lines are not identified. If the purpose is to detect only the white lines, you can use only Y- and S-channel images.  
+>><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/Cr.png"></p>  
+>> Like S-channel image, yellow lines on light-gray backgraound can be identified in Cr-channel image.  
+>><p align = "center"><img src="https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/cvtColor/Cr_yellow_on_light_gray.png"></p>  
 >>
 >
 >#### ***2-2. Contrast enhancement***
 >> Here we enhance the image contrast in each channel image to more clearly distinguish line pixels from other objects.
 >> First, piexl values lower than threshold are replaced with the threshold, and then the pixels are normalized with the maximum and minimum values.
 >><pre><code>channel_img[channel_img < threshold] = threshold
->>channel_img_noramlized = cv2.normalize(channel_img, None, 0, 255, cv2.NORM_MINMAX)</code></pre>
->>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/contrast_enhancement.png)
+>>channel_img_noramlized = cv2.normalize(channel_img, None, 0, 255, cv2.NORM_MINMAX)</code></pre>  
+>><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/contrast_enhancement.png"></p>  
 >>
 >
 >#### ***2-3. Filtering with gradient information***
 >>In gradient approach, Sobel operator is applied to calculate gradients in x- and y- directions, and then their magnitudes and orientations are calculated. Next, image pixels are thresholded with this gradient informations and the location of filtered image-pixels are saved on a gradient-mask image.
->> You can find the code for this process in the ***img_preprocessing( )*** function of class ***Mask*** in [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/master/classes.py).
->>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/gradient_filtering.png)
+>> You can find the code for this process in the ***img_preprocessing( )*** function of class ***Mask*** in [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/master/classes.py).  
+>><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/gradient_filtering.png"></p>  
 >>
 >
 >#### ***2-4. Thresholding with color information***
@@ -104,18 +103,18 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >>
 >> And then, the masks are combined.
 >><pre><code>color_mask = cv2.bitwise_or(Y_channel_color_mask, Cr_channel_color_mask)
->> color_mask = cv2.bitwise_or(color_mask, S_channel_color_mask)</code></pre>
->>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/color_thresholding.png)
+>> color_mask = cv2.bitwise_or(color_mask, S_channel_color_mask)</code></pre>  
+>><p align = "center"><img src ="https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/color_thresholding.png"></p>  
 >>
 >
 >#### Result
->> After the gradient mask and color mask have been calculated, they are combined with ***cv2.bitwise_or( )*** function.
->>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/Preprocessing%20result.png)
+>> After the gradient mask and color mask have been calculated, they are combined with ***cv2.bitwise_or( )*** function.  
+>><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/Preprocessing%20result.png"></p>  
 >> 
 >
 >
->### 3. Find lane
->![image](https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Detection.png)
+>### 3. Find lane  
+><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/Flow_Charts/Detection.png"></p>  
 >
 > You can find the code for lane finding in class ***Lane*** in [classes.py](https://github.com/DuseobSong/Lane-Detection/blob/master/classes.py).
 > #### 3.1 Perspective transform
@@ -131,8 +130,8 @@ In this Project, we'll use a gradient-based method and a color-based method to e
 >> Now we can generate Bird's eye view image with these matrices and [cv2.warpPerspectiveTransform( )](https://docs.opencv.org/2.4/modules/imgproc/doc/geometric_transformations.html) function.
 >><pre><code> bird_view_img = cv2.warpPerspectiveTransform(img, M, (lines.warp_size[0], lines.warp_size[1])</code></pre>
 >>
->>Here's the result of the perspective transformation.
->>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/perspective_transform/transform.png)
+>>Here's the result of the perspective transformation.  
+>><p align = "center"><img src = ""https://github.com/DuseobSong/Lane-Detection/blob/master/result/img_preprocessing/perspective_transform/transform.png"></p>  
 >
 >
 > #### 3.2 Search windows initialization
@@ -143,17 +142,17 @@ To estimate initial position of the lane lines, the ROI is diviedd into three su
 >> However, if the sub-ROI was set on the empty space of the dashed lines, foreign objects can affect the histogram and it may lead to a erroneous lane estimation. To prevent this, Histograms for each sub-ROI in the first 10 frames are stacked, and the initial positions of lines are estimated with this stacked histograms.
 >><pre><code>if FRAME_COUNT < 10:
 >>    lines.get_hist_info(warped_grad_mask = bird_view_grad_mask, warped_color_mask = bird_view_color_mask)
->></code></pre>
->>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/lane%20detection/s_window_init_stack.png)
+>></code></pre>  
+>><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/lane%20detection/s_window_init_stack.png"></p>  
 >>
->> Foreign objects and vehicle are clearly detected in the mask image, which is calculated from one frame. On the other hand, lane lines are clearly marked in the stacked mask image.
+>> Foreign objects and vehicle are clearly detected in the mask image, which is calculated from one frame. On the other hand, lane lines are clearly marked in the stacked mask image.  
 >>
->>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/lane%20detection/s_window_init.png)
+>><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/lane%20detection/s_window_init.png"></p>  
 >>
 >>Now, we have 6 x-coordinates for lane-line estimation. Y-coordinstes are simply defined as the middle y-coordinates of each sub-ROI. We can calculate the curve fitting coefficients for initial left and right lines with ***np.polyfit( )*** function. 
->> Eight search windows are assigned to each of the left and right lines, and are placed in ROI one after other in y-direction. And then, we can claculate the initial x-coordinate with the curve fitting coefficients and the y-coordinates of search windows.
+>> Eight search windows are assigned to each of the left and right lines, and are placed in ROI one after other in y-direction. And then, we can claculate the initial x-coordinate with the curve fitting coefficients and the y-coordinates of search windows.  
 >>
->>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/initialization/init_windows.png)
+>><p aligne = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/initialization/init_windows.png"></p>  
 >>
 >> The function ***init_lane_center_point( )*** in class ***Lane*** represents this process. This function only works when the current frame is the first frame or when the lines are not detected in previous frame.
 >
@@ -165,17 +164,17 @@ To estimate initial position of the lane lines, the ROI is diviedd into three su
 >>![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/initialization/sliding_window.png)
 
 ## Result
-> ### Result (Road information displayed)
->![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/lane_detection(output).gif)
+> ### Result (Road information displayed)  
+><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/lane_detection(output).gif"></p>  
 > 
-> ### Compare original frame with lane masked frame
->![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/output.gif)
+> ### Compare original frame with lane masked frame  
+><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/output.gif"></p>  
 >
-> ### 1. Bird's-eye View image
->![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Bird_view.gif)
+> ### 1. Bird's-eye View image  
+><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Bird_view.gif"></p>  
 >
-> ### 2. Camera view
->![image](https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Camera_view.gif)
+> ### 2. Camera view  
+><p align = "center"><img src = "https://github.com/DuseobSong/Lane-Detection/blob/master/result/gif/Camera_view.gif"></p>  
 >
 ## Discussion and future works
 >
